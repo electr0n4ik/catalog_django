@@ -32,8 +32,7 @@ class Product(models.Model):
                                  on_delete=models.CASCADE,
                                  **NULLABLE,
                                  verbose_name="Категория")
-    price = models.IntegerField(max_length=5,
-                                **NULLABLE,
+    price = models.IntegerField(**NULLABLE,
                                 verbose_name="Цена")
     data_factory = models.DateField()
     data_update = models.DateField()
