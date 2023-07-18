@@ -11,6 +11,7 @@ class Category(models.Model):
                             verbose_name="Наименование")
     description = models.CharField(max_length=200,
                                    verbose_name="Описание")
+    created_at = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
