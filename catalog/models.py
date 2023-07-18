@@ -7,11 +7,10 @@ NULLABLE = {
 
 class Category(models.Model):
     name = models.CharField(max_length=100,
-                            **NULLABLE,
                             verbose_name="Наименование")
     description = models.CharField(max_length=200,
+                                   **NULLABLE,
                                    verbose_name="Описание")
-    created_at = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -23,11 +22,12 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100,
-                            **NULLABLE,
                             verbose_name="Наименование")
     description = models.CharField(max_length=200,
+                                   **NULLABLE,
                                    verbose_name="Описание")
     photo = models.ImageField(upload_to='catalog/',
+                              **NULLABLE,
                               verbose_name="Фото")
     category = models.ForeignKey(Category,
                                  on_delete=models.CASCADE,
@@ -35,8 +35,8 @@ class Product(models.Model):
                                  verbose_name="Категория")
     price = models.IntegerField(**NULLABLE,
                                 verbose_name="Цена")
-    data_factory = models.DateField()
-    data_update = models.DateField()
+    data_factory = models.DateField(**NULLABLE)
+    data_update = models.DateField(**NULLABLE)
 
     def __str__(self):
         return self.name
