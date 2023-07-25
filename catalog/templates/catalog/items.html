@@ -1,0 +1,39 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <h1 class="display-4 fw-normal text-body-emphasis">
+            Главная
+        </h1>
+        <p class="fs-5 text-body-secondary">
+            Представляю Вашему вниманию главную страницу сайта интернет магазина!
+        </p>
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+            {% for object in object_list %}
+                <div class="col">
+                    <div class="card mb-4 rounded-3 ">
+                        <div class="card-header py-3 ">
+                            <h4 class="my-0 fw-normal">{{ object.name }}</h4>
+                        </div>
+                        <div>
+                            <h1 class="card-title pricing-card-title">
+                                <small class="text-body-secondary fw-light">
+                                    {{ object.description }}
+                                </small>
+                            </h1>
+                            <p>
+                                Цена: {{ object.price }} руб.
+                            </p>
+                        </div>
+
+
+                    </div>
+                    <a href="/products/{{ object.id }}"
+                       class="w-50 btn btn-lg btn-primary"
+                       type="button">
+                        Подробнее {{ object.id }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

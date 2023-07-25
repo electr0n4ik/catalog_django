@@ -48,7 +48,7 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a aria-current="page" class="nav-link active" href="#">
+                <a aria-current="page" href="#">
                     <svg class="bi pe-none me-2" height="16" width="16">
                         <use href="#home"></use>
                     </svg>
@@ -110,8 +110,30 @@
     </div>
     <div class="b-example-divider b-example-vr"></div>
 
-    {% block content %}
-    {% endblock %}
+    <div class="col">
+                    <div class="card mb-4 rounded-3 ">
+                        <div class="card-header py-3 ">
+                            <h4 class="my-0 fw-normal">{{ object.name }}</h4>
+                        </div>
+                        <div>
+                            <h1 class="card-title pricing-card-title">
+                                <small class="text-body-secondary fw-light">
+                                    {{ object.description }}
+                                </small>
+                            </h1>
+                            <p>
+                                Цена: {{ object.price }} руб.
+                            </p>
+                        </div>
+
+
+                    </div>
+                    <a href="/products/{{ object.id }}"
+                       class="w-50 btn btn-lg btn-primary"
+                       type="button">
+                        Подробнее
+                    </a>
+                </div>
 
     <script src="{% static 'js/sidebars.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"
