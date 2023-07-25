@@ -7,7 +7,7 @@
         <p class="fs-5 text-body-secondary">
             Представляю Вашему вниманию главную страницу сайта интернет магазина!
         </p>
-        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center" >
             {% for object in object_list %}
                 <div class="col">
                     <div class="card mb-4 rounded-3 ">
@@ -20,18 +20,19 @@
                                     {{ object.description }}
                                 </small>
                             </h1>
+                            <img src="/media/{{ object.photo }}"/>
+{#                            <img src="{% mediapath object.image %}" />#}
                             <p>
                                 Цена: {{ object.price }} руб.
                             </p>
+                            <a href="/product/{{ object.pk }}"
+                               class="w-50 btn btn-lg btn-primary"
+                               type="button">
+                                Подробнее
+                            </a>
                         </div>
-
-
                     </div>
-                    <a href="/products/{{ object.id }}"
-                       class="w-50 btn btn-lg btn-primary"
-                       type="button">
-                        Подробнее {{ object.id }}
-                    </a>
+
                 </div>
             {% endfor %}
         </div>

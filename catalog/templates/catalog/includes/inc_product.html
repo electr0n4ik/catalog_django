@@ -1,0 +1,27 @@
+{% extends 'catalog/product.html' %}
+{% block content %}
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <h1 class="display-4 fw-normal text-body-emphasis">
+            {{ object.name }}
+        </h1>
+        <p></p>
+        <div class="col">
+
+            <div>
+                <p>
+                    <img src="/media/{{ object.photo }}"/>
+                </p>
+                {{ object.description }}
+                <p>
+                    Цена: {{ object.price }} руб.
+                </p>
+            </div>
+        </div>
+
+        <a class="btn btn-lg btn-primary"
+           type="button">
+            Купить
+        </a>
+
+    </div>
+{% endblock %}

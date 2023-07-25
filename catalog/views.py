@@ -6,13 +6,12 @@ def contacts(request):
     return render(request, 'catalog/contacts.html')
 
 
-def product(request, id_item):
-    product_shop = get_object_or_404(Product, id_item=id_item)
+def product(request, pk):
+    product_shop = get_object_or_404(Product, pk=pk)
     context = {
-        'object_list': product_shop,
-        'title': 'Каталог'
+        'object': product_shop
     }
-    return render(request, 'catalog/product.html', context)
+    return render(request, 'catalog/includes/inc_product.html', context)
 
 
 def items(request):
@@ -20,4 +19,4 @@ def items(request):
         'object_list': Product.objects.all()[:3],
         'title': 'Каталог'
     }
-    return render(request, 'catalog/items.html', context)
+    return render(request, 'catalog/includes/inc_base.html', context)
