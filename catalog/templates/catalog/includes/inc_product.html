@@ -1,4 +1,6 @@
-{% extends 'catalog/product.html' %}
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load custom_tags %}
 {% block content %}
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
         <h1 class="display-4 fw-normal text-body-emphasis">
@@ -9,7 +11,7 @@
 
             <div>
                 <p>
-                    <img src="/media/{{ object.photo }}"/>
+                    <img src="{% mediapath object.photo %}" alt=""/>
                 </p>
                 {{ object.description }}
                 <p>
