@@ -1,7 +1,7 @@
 from itertools import product
 
 from django.core.management import BaseCommand
-from catalog.models import Product
+from catalog.models import Product, Category
 
 
 class Command(BaseCommand):
@@ -16,5 +16,13 @@ class Command(BaseCommand):
             {'name': 'помидора', 'description': 'Красная', "photo": "catalog/помидора.png", "price": 300, "category_id": 2},
         ]
 
+        category_list = [
+            {'name': 'Фрукты', 'description': 'Обычно сладкие'},
+            {'name': 'Овощи', 'description': 'Растут на грядках'},
+        ]
+
         for element in product_list:
             Product.objects.create(**element)
+
+        for element in category_list:
+            Category.objects.create(**element)
