@@ -13,6 +13,10 @@ def product(request, pk):
     }
     return render(request, 'catalog/includes/inc_product.html', context)
 
+class ProductListView(ListView):
+
+    model = Product
+
 
 def items(request):
     context = {
