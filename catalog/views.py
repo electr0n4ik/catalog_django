@@ -1,6 +1,6 @@
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View, ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.shortcuts import render
-from catalog.models import Product
+from catalog.models import Product, Blog
 
 
 # catalog/contacts.html - Шаблон для ContactsView.
@@ -33,3 +33,34 @@ class ItemsView(View):
             'title': 'Каталог'
         }
         return render(request, 'catalog/includes/inc_base.html', context)
+
+
+class BlogListView(ListView):
+    model = Blog
+    template_name = 'blog/includes/inc_entry_list.html'
+    context_object_name = 'object_list'
+    paginate_by = 10
+
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = 'blog/includes/inc_entry_detail.html'
+    context_object_name = 'object'
+
+
+class BlogCreateView(CreateView):
+    model = Blog
+
+    template_name = 'blog/entry_form.html'
+
+
+class BlogUpdateView(UpdateView):
+    model = Blog
+
+    template_name = 'blog/entry_form.html'
+
+
+class BlogDeleteView(DeleteView):
+    model = Blog
+    success_url = '/blog/'  # URL, на который перенаправлять после успешного удаления
+    template_name = 'blog/entry_confirm_delete.html'

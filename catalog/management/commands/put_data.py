@@ -1,14 +1,10 @@
-from itertools import product
-
 from django.core.management import BaseCommand
-from catalog.models import Product, Category
+from catalog.models import Product, Category, Blog
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        products = Product.objects.all()
-        products.delete()
 
         category_list = [
             {'name': 'Фрукты', 'description': 'Обычно сладкие'},
@@ -16,9 +12,25 @@ class Command(BaseCommand):
         ]
 
         product_list = [
-            {'name': 'Апельсин', 'description': 'Сладкий и оранжевый', "photo": "catalog/апельсин.png", "price": 100, "category_id": 1},
-            {'name': 'Яблоко', 'description': 'Кислый и зеленый', "photo": "catalog/яблоко.jpeg", "price": 200, "category_id": 1},
-            {'name': 'помидора', 'description': 'Красная', "photo": "catalog/помидора.png", "price": 300, "category_id": 2},
+            {'name': 'Апельсин', 'description': 'Сладкий и оранжевый', "photo": "catalog/апельсин.png", "price": 100,
+             "category_id": 1},
+            {'name': 'Яблоко', 'description': 'Кислый и зеленый', "photo": "catalog/яблоко.jpeg", "price": 200,
+             "category_id": 1},
+            {'name': 'помидора', 'description': 'Красная', "photo": "catalog/помидора.png", "price": 300,
+             "category_id": 2},
+        ]
+
+        blog_entry_list = [
+            {'title': 'Первая запись', 'slug': 'pervaya-zapis', 'content': 'Содержимое первой записи блога',
+             'preview': 'blog_previews/1.png', 'is_published': True, 'view_count': 10},
+            {'title': 'Вторая запись', 'slug': 'vtoraya-zapis', 'content': 'Содержимое второй записи блога',
+             'preview': 'blog_previews/2.png', 'is_published': True, 'view_count': 20},
+            {'title': 'Третья запись', 'slug': 'tretaya-zapis', 'content': 'Содержимое третьей записи блога',
+             'preview': 'blog_previews/3.png', 'is_published': False, 'view_count': 5},
+            {'title': 'Четвертая запись', 'slug': 'chetvertaya-zapis', 'content': 'Содержимое четвертой записи блога',
+             'preview': 'blog_previews/4.png', 'is_published': True, 'view_count': 15},
+            {'title': 'Пятая запись', 'slug': 'pyataya-zapis', 'content': 'Содержимое пятой записи блога',
+             'preview': 'blog_previews/5.png', 'is_published': True, 'view_count': 8},
         ]
 
         for element in category_list:
@@ -26,3 +38,6 @@ class Command(BaseCommand):
 
         for element in product_list:
             Product.objects.create(**element)
+
+        for element in blog_entry_list:
+            Blog.objects.create(**element)

@@ -1,4 +1,4 @@
-{% extends 'catalog/base.html' %}
+{% extends 'blog/entry_list.html' %}
 {% load custom_tags %}
 
 {% block content %}
@@ -7,26 +7,26 @@
             Главная
         </h1>
         <p class="fs-5 text-body-secondary">
-            Представляю Вашему вниманию главную страницу сайта интернет магазина!
+            Представляю Вашему вниманию страницу блога о продуктах!
         </p>
         <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
             {% for object in object_list %}
                 <div class="col">
                     <div class="card mb-4 rounded-3 ">
                         <div class="card-header py-3 ">
-                            <h4 class="my-0 fw-normal">{{ object.name }}</h4>
+                            <h4 class="my-0 fw-normal">{{ object.title }}</h4>
                         </div>
                         <div>
                             <h1 class="card-title pricing-card-title">
                                 <small class="text-body-secondary fw-light">
-                                    {{ object.description }}
+                                    {{ object.content }}
                                 </small>
                             </h1>
                             <img src="{% mediapath object.photo %}" alt=""/>
                             <p>
-                                Цена: {{ object.price }} руб.
+                                Просмотры: {{ object.view_count }}
                             </p>
-                            <a href="/product/{{ object.pk }}"
+                            <a href="/blog/{{ object.slug }}"
                                class="w-50 btn btn-lg btn-primary"
                                type="button">
                                 Подробнее
