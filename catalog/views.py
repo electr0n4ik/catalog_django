@@ -1,12 +1,8 @@
 from django.views.generic import View, ListView, DetailView, UpdateView, CreateView, DeleteView
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from catalog.models import Product, Blog
 
 
-# catalog/contacts.html - Шаблон для ContactsView.
-# catalog/includes/inc_product.html - Шаблон для ProductDetailView.
-# catalog/product_list.html - Шаблон для ProductListView.
-# catalog/includes/inc_base.html - Шаблон для ItemsView.
 class ContactsView(View):
     def get(self, request):
         return render(request, 'catalog/contacts.html')
@@ -41,11 +37,23 @@ class BlogListView(ListView):
     context_object_name = 'object_list'
     paginate_by = 10
 
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        queryset = queryset.filter(is_published=True)
+        return queryset
+
 
 class BlogDetailView(DetailView):
     model = Blog
     template_name = 'blog/includes/inc_entry_detail.html'
     context_object_name = 'object'
+
+    def get_object(self, queryset=None):
+        self.object = super(). get_object(queryset)
+        self.object.view_count += 1
+        self.object.save()
+
+        return self.object
 
 
 class BlogCreateView(CreateView):
