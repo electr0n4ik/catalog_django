@@ -22,15 +22,15 @@ class Command(BaseCommand):
 
         blog_entry_list = [
             {'title': 'Первая запись', 'slug': 'pervaya-zapis', 'content': 'Содержимое первой записи блога',
-             'preview': 'blog_previews/1.png', 'is_published': True, 'view_count': 10},
+             'preview': 'blog/апельсин.png', 'is_published': True, 'view_count': 10},
             {'title': 'Вторая запись', 'slug': 'vtoraya-zapis', 'content': 'Содержимое второй записи блога',
-             'preview': 'blog_previews/2.png', 'is_published': True, 'view_count': 20},
+             'preview': 'blog/помидора.png', 'is_published': True, 'view_count': 20},
             {'title': 'Третья запись', 'slug': 'tretaya-zapis', 'content': 'Содержимое третьей записи блога',
-             'preview': 'blog_previews/3.png', 'is_published': False, 'view_count': 5},
+             'preview': 'blog/яблоко.jpeg', 'is_published': False, 'view_count': 5},
             {'title': 'Четвертая запись', 'slug': 'chetvertaya-zapis', 'content': 'Содержимое четвертой записи блога',
-             'preview': 'blog_previews/4.png', 'is_published': True, 'view_count': 15},
+             'preview': 'blog/4.png', 'is_published': True, 'view_count': 15},
             {'title': 'Пятая запись', 'slug': 'pyataya-zapis', 'content': 'Содержимое пятой записи блога',
-             'preview': 'blog_previews/5.png', 'is_published': True, 'view_count': 8},
+             'preview': 'blog/5.png', 'is_published': True, 'view_count': 8},
         ]
 
         for element in category_list:

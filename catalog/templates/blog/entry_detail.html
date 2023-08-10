@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 <!doctype html>
 <html data-bs-theme="auto" lang="en">
 <head>
@@ -119,8 +120,37 @@
     <div class="b-example-divider b-example-vr"></div>
 
 
-    {% block content %}
-    {% endblock %}
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <h1 class="display-4 fw-normal text-body-emphasis">
+            Главная
+        </h1>
+        <p class="fs-5 text-body-secondary">
+            Представляю Вашему вниманию страницу блога о продуктах!
+        </p>
+
+
+        <div class="col">
+            <div class="card mb-4 rounded-3 ">
+                <div class="card-header py-3 ">
+                    <h4 class="my-0 fw-normal">{{ object.title }}</h4>
+                </div>
+                <div>
+                    <h1 class="card-title pricing-card-title">
+                        <small class="text-body-secondary fw-light">
+                            {{ object.content }}
+                        </small>
+                    </h1>
+                    <img src="{% mediapath object.photo %}" alt=""/>
+                    <p>
+                        Просмотры: {{ object.view_count }}
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
 
     <script src="{% static 'js/sidebars.js' %}"></script>

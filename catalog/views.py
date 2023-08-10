@@ -1,6 +1,10 @@
+from django.urls import reverse_lazy
 from django.views.generic import View, ListView, DetailView, UpdateView, CreateView, DeleteView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.urls import reverse
 from catalog.models import Product, Blog
+
+from pytils.translit import slugify
 
 
 class ContactsView(View):
@@ -45,11 +49,11 @@ class BlogListView(ListView):
 
 class BlogDetailView(DetailView):
     model = Blog
-    template_name = 'blog/includes/inc_entry_detail.html'
+    template_name = 'blog/entry_detail.html'
     context_object_name = 'object'
 
     def get_object(self, queryset=None):
-        self.object = super(). get_object(queryset)
+        self.object = super().get_object(queryset)
         self.object.view_count += 1
         self.object.save()
 
@@ -58,8 +62,18 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(CreateView):
     model = Blog
-
+    fields = ('title', 'content')
+    context_object_name = 'object'
     template_name = 'blog/entry_form.html'
+
+    def form_valid(self, form):
+        new_blog = form.save(commit=False)
+        new_blog.slug = slugify(new_blog.title)
+        new_blog.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('catalog:entry_detail', kwargs={'slug': self.object.slug})
 
 
 class BlogUpdateView(UpdateView):
