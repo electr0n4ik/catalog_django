@@ -16,7 +16,12 @@
                 {{ object.description }}
                 <p>
                     Цена: {{ object.price }} руб.
+                    {{ product.active_version.version_name }}
                 </p>
+                {% if object.is_current_version %}
+                    - Активная версия: {{ object.active_version.version_number }} (
+                    {{ object.active_version.version_name }})
+                {% endif %}
                 <a href="/product/{{ object.pk }}/update"
                    class="btn btn-lg btn-primary"
                    type="button">

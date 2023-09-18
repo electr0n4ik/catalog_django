@@ -1,9 +1,3 @@
-import os
-
-from django import forms
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -12,7 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView, U
 from dotenv import load_dotenv
 from pytils.translit import slugify
 
-from catalog.forms import BlogForm, ProductForm, ProductVersionForm
+from catalog.forms import ProductForm, ProductVersionForm
 from catalog.models import Product, Contacts, Blog, ProductVersion
 
 load_dotenv()
