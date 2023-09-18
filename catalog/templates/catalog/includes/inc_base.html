@@ -9,6 +9,7 @@
         <p class="fs-5 text-body-secondary">
             Представляю Вашему вниманию главную страницу сайта интернет магазина!
         </p>
+        <a href="{% url "catalog:product_create" %}" class="btn btn-outline-primary me-2">Добавить продукт</a>
         <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
             {% for object in object_list %}
                 <div class="col">
@@ -31,6 +32,10 @@
                                type="button">
                                 Подробнее
                             </a>
+{#                            {% if product.active_version %}#}
+{#                                - Активная версия: {{ product.active_version.version_number }} (#}
+{#                                {{ product.active_version.version_name }})#}
+{#                            {% endif %}#}
                         </div>
                     </div>
 
