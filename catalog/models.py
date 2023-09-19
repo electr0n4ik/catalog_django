@@ -2,6 +2,8 @@ import django
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from user.models import User
+
 NULLABLE = {
     "null": True, "blank": True
 }
@@ -10,6 +12,7 @@ NULLABLE = {
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Наименование")
     description = models.CharField(max_length=200, **NULLABLE, verbose_name="Описание")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Версия продукта', null=True, blank=True)
 
     def __str__(self):
         return f"{self.name}"

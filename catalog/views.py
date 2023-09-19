@@ -31,12 +31,9 @@ class ProductDetailView(DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
-        # if not self.request.user.is_authenticated:
-        #     return
+        if not self.request.user.is_authenticated:
+            return
         return super().get_context_data(**kwargs)
-    # template_name = 'catalog/includes/product_detail.html'
-    # context_object_name = 'object'
-    # pk_url_kwarg = 'pk'
 
 
 class ProductListView(ListView):
@@ -45,10 +42,9 @@ class ProductListView(ListView):
     template_name = 'catalog/includes/inc_base.html'
 
     def get_context_data(self, **kwargs):
-        # if not self.request.user.is_authenticated:
-        #     return
+        if not self.request.user.is_authenticated:
+            return
         context = super().get_context_data(**kwargs)
-        # print(self.request.user.is_authenticated)
         for product in context['object_list']:
             active_version = ProductVersion.objects.filter(product=product, is_сurrent_version=True).first()
             product.active_version = active_version
@@ -63,8 +59,8 @@ class ProductCreateView(CreateView):
         return reverse('catalog:product_view', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
-        # if not self.request.user.is_authenticated:
-        #     return
+        if not self.request.user.is_authenticated:
+            return
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -81,8 +77,8 @@ class ProductUpdateView(UpdateView):
     success_url = reverse_lazy('catalog:inc_base')
 
     def get_context_data(self, **kwargs):
-        # if not self.request.user.is_authenticated:
-        #     return
+        if not self.request.user.is_authenticated:
+            return
         context = super().get_context_data(**kwargs)
         # Формирование формсета
         VersionFormSet = inlineformset_factory(Product, ProductVersion, form=ProductVersionForm, extra=1)
