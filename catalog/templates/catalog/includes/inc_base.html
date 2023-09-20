@@ -13,18 +13,18 @@
             <a href="{% url "catalog:product_create" %}" class="btn btn-outline-primary me-2">Добавить продукт</a>
             <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
             {% for object in object_list %}
-{#                <div class="row">#}
                 <div class="card mb-4 rounded-3 ">
                     <div class="card-header py-3 ">
-                        <h4 class="my-0 fw-normal">{{ object.name }}</h4>
+                        <h2 class="my-0 fw-normal">{{ object.name }}</h2>
                     </div>
                     <div>
-                        <h1 class="card-title pricing-card-title">
+
+                        <img src="{% mediapath object.photo %}" alt=""/>
+                        <h3 class="card-title pricing-card-title">
                             <small class="text-body-secondary fw-light">
                                 {{ object.description }}
                             </small>
-                        </h1>
-                        <img src="{% mediapath object.photo %}" alt=""/>
+                        </h3>
                         <p>
                             Цена: {{ object.price }} руб.
                         </p>
@@ -37,6 +37,7 @@
                     </div>
                 </div>
             {% endfor %}
+
         {% else %}
             Войдите, чтобы видеть и создавать продукты
         {% endif %}

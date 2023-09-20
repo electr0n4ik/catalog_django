@@ -39,6 +39,7 @@ class Product(models.Model):
                                 verbose_name="Цена")
     data_factory = models.DateField(**NULLABLE)
     data_update = models.DateField(**NULLABLE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Версия продукта', null=True, blank=True)
 
     def __str__(self):
         return f"{self.name}"
