@@ -3,7 +3,11 @@
 
 {% block content %}
 
-
+    {% if user != object.user %}
+        <div class="pricing-header p-3 pb-md-4 mx-auto text-center text-danger">
+            Получите права, чтобы редактировать!
+        </div>
+    {% else %}
         <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
             <div class="text-center">
                 <h1 class="display-4 fw-normal text-body-emphasis">Продукт</h1>
@@ -35,5 +39,6 @@
                     <button type="submit" class="btn btn-primary">Подтвердить</button>
                 </p>
             </form>
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}

@@ -2,7 +2,6 @@ import os
 import random
 import string
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
@@ -62,7 +61,7 @@ class UserLoginView(LoginView):
 class UserProfileView(UpdateView):
     model = User
     form_class = UserProfilForm
-    success_url = reverse_lazy('catalog:home')
+    success_url = reverse_lazy('catalog:inc_base')
 
     def get_object(self, queryset=None):
         return self.request.user

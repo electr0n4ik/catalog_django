@@ -8,6 +8,7 @@
     {#            Войдите, чтобы видеть и создавать продукты#}
     {#        {% endif %}#}
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+
         {% if user.is_authenticated %}
             <h1 class="display-4 fw-normal text-body-emphasis">
                 {{ object.name }}
@@ -32,10 +33,23 @@
                        type="button">
                         Редактировать
                     </a>
+                    {% if user|is_moderator or user == product.user %}
+                        <a href="{% url 'catalog:update_product' pk=product.pk %}"
+                           class="btn btn-sm btn-outline-secondary">
+                            Изменить
+                        </a>
+                    {% endif %}
+                    {% if user.is_superuser %}
+                        <a href="{% url 'catalog:delete_product' pk=product.pk %}"
+                           class="btn btn-sm btn-outline-secondary text-danger">
+                            Удалить
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% else %}
             Войдите, чтобы видеть и создавать продукты
         {% endif %}
+
     </div>
 {% endblock %}

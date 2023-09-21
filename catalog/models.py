@@ -39,7 +39,9 @@ class Product(models.Model):
                                 verbose_name="Цена")
     data_factory = models.DateField(**NULLABLE)
     data_update = models.DateField(**NULLABLE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Версия продукта', null=True, blank=True)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Версия продукта', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создатель', null=True, blank=True)
+    is_publish = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     def __str__(self):
         return f"{self.name}"
@@ -47,6 +49,12 @@ class Product(models.Model):
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+        permissions = [
+            (
+                'set_published',
+                'Can publish posts'
+            ),
+        ]
 
 
 class ProductVersion(models.Model):

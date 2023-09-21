@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import Group
 from dotenv import load_dotenv
 from pytils.translit import slugify
 
@@ -27,16 +29,16 @@ class ContactsView(View):
         return render(request, 'catalog/contacts.html', context={'object': contact})
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
-        if not self.request.user.is_authenticated:
-            return
+        # if not self.request.user.is_authenticated:
+        #     return
         return super().get_context_data(**kwargs)
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
 
     template_name = 'catalog/includes/inc_base.html'
@@ -50,8 +52,11 @@ class ProductListView(ListView):
             product.active_version = active_version
         return context
 
+    def get_queryset(self):
+        return super().get_queryset().filter(is_publish=True)
 
-class ProductCreateView(CreateView):
+
+class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
 
@@ -59,9 +64,10 @@ class ProductCreateView(CreateView):
         return reverse('catalog:product_view', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
-        if not self.request.user.is_authenticated:
-            return
-        return super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        if not self.request.user.has_perm('catalog.set_published'):
+            context['form'].fields.pop('is_publish')
+        return context
 
     def form_valid(self, form):
         if form.is_valid():
@@ -71,21 +77,29 @@ class ProductCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:inc_base')
 
     def get_context_data(self, **kwargs):
-        if not self.request.user.is_authenticated:
-            return
         context = super().get_context_data(**kwargs)
-        # Формирование формсета
-        VersionFormSet = inlineformset_factory(Product, ProductVersion, form=ProductVersionForm, extra=1)
-        if self.request.method == 'POST':
-            context['formset'] = VersionFormSet(self.request.POST, instance=self.object)
+        if not self.request.user.has_perm('catalog.set_published'):
+            context['form'].fields.pop('is_publish')
+        moderators = Group.objects.get(name="moderators").user_set.all()
+        if self.request.user in moderators:
+            context['form'].fields.pop('title')
+            context['form'].fields.pop('img')
+            context['form'].fields.pop('price')
+        elif self.request.user == self.object.user:
+            # Формирование формсета
+            VersionFormSet = inlineformset_factory(Product, ProductVersion, form=ProductVersionForm, extra=1)
+            if self.request.method == 'POST':
+                context['formset'] = VersionFormSet(self.request.POST, instance=self.object)
+            else:
+                context['formset'] = VersionFormSet(instance=self.object)
         else:
-            context['formset'] = VersionFormSet(instance=self.object)
+            return
         return context
 
     def form_valid(self, form):
@@ -101,10 +115,14 @@ class ProductUpdateView(UpdateView):
                         form.add_error(None, "Не может быть больше одной текущей версии")
                         return self.form_invalid(form=form)
             formset.save()
+            if form.cleaned_data.get('is_publish'):
+                if not self.request.user.has_perm('set_published'):
+                    form.add_error('is_publish', 'Публиковать могут только модераторы')
+                    return self.form_invalid(form)
             return super().form_valid(form=form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:inc_base')
 
