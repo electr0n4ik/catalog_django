@@ -147,3 +147,13 @@ AUTH_USER_MODEL = 'user.User'
 LOGIN_REDIRECT_URL = reverse_lazy('catalog:inc_base')
 LOGOUT_REDIRECT_URL = reverse_lazy('catalog:inc_base')
 LOGIN_URL = 'user/'
+
+CACHE_ENABLED = True
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": "redis://127.0.0.1:6379",
+        }
+    }

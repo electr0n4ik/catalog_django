@@ -11,6 +11,10 @@ from pytils.translit import slugify
 from catalog.forms import ProductForm, ProductVersionForm
 from catalog.models import Product, Contacts, Blog, ProductVersion
 
+from django.core.cache import cache
+from catalog.models import Product, Contacts, Blog, ProductVersion, Category
+from config.settings import CACHE_ENABLED
+
 load_dotenv()
 
 
@@ -33,8 +37,6 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
-        # if not self.request.user.is_authenticated:
-        #     return
         return super().get_context_data(**kwargs)
 
 
@@ -183,3 +185,29 @@ class BlogDeleteView(DeleteView):
     model = Blog
     success_url = '/blog/'  # URL, на который перенаправлять после успешного удаления
     template_name = 'blog/entry_confirm_delete.html'
+
+
+class CategoriesListView(LoginRequiredMixin, ListView):
+    model = Category
+
+    def get_queryset(self):
+        if CACHE_ENABLED:
+            key = f'categories_list'
+            categories_list = cache.get(key)
+            if categories_list is None:
+                categories_list = Category.objects.all()
+                cache.set(key, categories_list)
+        else:
+            categories_list = Category.objects.all()
+        return categories_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)

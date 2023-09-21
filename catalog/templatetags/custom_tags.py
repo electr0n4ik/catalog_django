@@ -4,9 +4,19 @@ from django.contrib.auth.models import Group
 register = template.Library()
 
 
-@register.simple_tag
-def mediapath(path):
-    return '/media/' + str(path)
+# Создание фильтра
+@register.filter()
+def mediapath(val):
+    if val:
+        return f'/media/{val}'
+    return ''
+
+
+@register.simple_tag()
+def mediapath(val):
+    if val:
+        return f'/media/{val}'
+    return ''
 
 
 @register.filter()
