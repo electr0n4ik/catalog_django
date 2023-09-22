@@ -9,11 +9,9 @@ from dotenv import load_dotenv
 from pytils.translit import slugify
 
 from catalog.forms import ProductForm, ProductVersionForm
-from catalog.models import Product, Contacts, Blog, ProductVersion
+from catalog.services import get_categories
 
-from django.core.cache import cache
 from catalog.models import Product, Contacts, Blog, ProductVersion, Category
-from config.settings import CACHE_ENABLED
 
 load_dotenv()
 
@@ -191,15 +189,7 @@ class CategoriesListView(LoginRequiredMixin, ListView):
     model = Category
 
     def get_queryset(self):
-        if CACHE_ENABLED:
-            key = f'categories_list'
-            categories_list = cache.get(key)
-            if categories_list is None:
-                categories_list = Category.objects.all()
-                cache.set(key, categories_list)
-        else:
-            categories_list = Category.objects.all()
-        return categories_list
+        return get_categories(Category)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

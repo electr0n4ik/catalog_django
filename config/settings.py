@@ -13,15 +13,20 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from django.urls import reverse_lazy
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env_path = BASE_DIR / '.env'
+load_dotenv(dotenv_path=env_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b5-1%slniy)4gb#20jjp71#9990%t=y+y4m)kj5#046n(3296p'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -141,19 +146,16 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 AUTH_USER_MODEL = 'user.User'
 
-# LOGIN_REDIRECT_URL = '/'
-# LOGOUT_REDIRECT_URL = '/'
-
 LOGIN_REDIRECT_URL = reverse_lazy('catalog:inc_base')
 LOGOUT_REDIRECT_URL = reverse_lazy('catalog:inc_base')
 LOGIN_URL = 'user/'
 
-CACHE_ENABLED = True
+CACHE_ENABLED = os.getenv('CACHE_ENABLED')
 
 if CACHE_ENABLED:
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": "redis://127.0.0.1:6379",
+            "LOCATION": os.getenv('CACHES_LOCATION'),
         }
     }
