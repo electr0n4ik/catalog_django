@@ -9,7 +9,6 @@ def forbidden_words_detect(text):
     forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
     for forbidden_word in forbidden_words:
         if text in forbidden_words:
-
             raise forms.ValidationError(f'Недопустимое слово \'{forbidden_word}\'')
 
 
@@ -50,6 +49,17 @@ class ProductForm(forms.ModelForm):
         cleaned_data = self.cleaned_data.get('description')
         forbidden_words_detect(cleaned_data)
         return cleaned_data
+
+
+class ProductModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'category', 'is_publish')
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 5, 'placeholder': 'Write a description...'
+            })
+        }
 
 
 class ProductVersionForm(forms.ModelForm):

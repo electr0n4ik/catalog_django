@@ -1,4 +1,5 @@
 from django.forms import inlineformset_factory
+from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import View
@@ -8,7 +9,7 @@ from django.contrib.auth.models import Group
 from dotenv import load_dotenv
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm, ProductVersionForm
+from catalog.forms import ProductForm, ProductVersionForm, ProductModeratorForm
 from catalog.models import Product, Contacts, Blog, ProductVersion
 
 load_dotenv()
@@ -120,6 +121,14 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
                     form.add_error('is_publish', 'Публиковать могут только модераторы')
                     return self.form_invalid(form)
             return super().form_valid(form=form)
+
+    def get_form_class(self):
+        if self.request.user == self.object.user:
+            return ProductForm
+        elif self.request.user.groups.filter(name='Moderators').exists():
+            return ProductModeratorForm
+        else:
+            raise Http404
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
