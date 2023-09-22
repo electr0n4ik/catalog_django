@@ -11,7 +11,7 @@ from .views import (
     BlogListView,
     BlogDetailView,
     BlogUpdateView,
-    BlogDeleteView,
+    BlogDeleteView, ProductDeleteView,
 )
 
 app_name = 'catalog'
@@ -24,6 +24,8 @@ urlpatterns = [
     path('product/<int:pk>/', ProductDetailView.as_view(), name='product_view'),
     path('product/create/', ProductCreateView.as_view(), name='product_create'),
     path('product/<int:pk>/update/', ProductUpdateView.as_view(), name='product_update'),
+    path('delete_product/<int:pk>/', ProductDeleteView.as_view(), name='delete_product'),
+
 
     path('blog/', BlogListView.as_view(), name='entry_list'),
     path('blog/create/', BlogCreateView.as_view(), name='entry_form'),

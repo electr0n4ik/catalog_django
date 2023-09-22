@@ -78,21 +78,30 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:inc_base')
+    permission_required = 'product.moderator'
+
+    def has_permission(self):
+        obj = self.get_object()
+        if self.request.user == obj.user or self.request.user.groups.filter(name='Moderators').exists():
+            return True
+        return super().has_permission()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if not self.request.user.has_perm('catalog.set_published'):
             context['form'].fields.pop('is_publish')
-        moderators = Group.objects.get(name="moderators").user_set.all()
-        if self.request.user in moderators:
-            context['form'].fields.pop('title')
-            context['form'].fields.pop('img')
-            context['form'].fields.pop('price')
-        elif self.request.user == self.object.user:
+        # moderators = Group.objects.get(name="moderators").user_set.all()
+        # if self.request.user in moderators:
+        #     context['form'].fields.pop('title')
+        #     context['form'].fields.pop('img')
+        #     context['form'].fields.pop('price')
+        # elif self.request.user == self.object.user:
+        if self.request.user == self.object.user:
+
             # Формирование формсета
             VersionFormSet = inlineformset_factory(Product, ProductVersion, form=ProductVersionForm, extra=1)
             if self.request.method == 'POST':
