@@ -56,7 +56,7 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link text-white" href="#">
+                <a class="nav-link text-white" href="categories/">
                     <svg class="bi pe-none me-2" height="16" width="16">
                         <use href="#speedometer2"></use>
                     </svg>
@@ -79,7 +79,7 @@
                     Контакты
                 </a>
             </li>
-             <li>
+            <li>
                 <a class="nav-link text-white" href="blog/">
                     <svg class="bi pe-none me-2" height="16" width="16">
                         <use href="#people-circle"></use>
@@ -94,10 +94,13 @@
                class="d-flex align-items-center text-white text-decoration-none dropdown-toggle show"
                data-bs-toggle="dropdown"
                href="#">
-                <img alt="" class="rounded-circle me-2" height="32"
-                     src="https://freelance.ru/img/portfolio/pics/00/36/88/3573970.jpg"
-                     width="32">
-                <strong>Пользователь</strong>
+                {% if user.is_authenticated %}
+                    <img src="/media/{{ user.avatar }}" alt="/media/{{ user.avatar }}" width="32" height="32"
+                         class="rounded-circle me-2">
+                    <strong>{{ user }}</strong>
+                {% else %}
+                    <strong>Пользователь</strong>
+                {% endif %}
 
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small"
@@ -106,12 +109,13 @@
                   inset: auto auto 0 0;
                   margin: 0; transform:
                   translate(0px, -34px);">
-                <li><a class="dropdown-item" href="#">Аккаунт</a></li>
-                <li><a class="dropdown-item" href="#">Корзина</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Выход</a></li>
+                {% if user.is_authenticated %}
+                    <li><a class="dropdown-item" href="{% url 'user:profile' %}">Профиль</a></li>
+                    <li><a class="dropdown-item" href="{% url 'user:logout' %}">Выйти из профиля</a></li>
+                {% else %}
+                    <li><a class="dropdown-item" href="{% url 'user:register' %}">Регистрация</a></li>
+                    <li><a class="dropdown-item" href="{% url 'user:login' %}">Войти</a></li>
+                {% endif %}
             </ul>
         </div>
 

@@ -1,4 +1,8 @@
+import django
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+
+from user.models import User
 
 NULLABLE = {
     "null": True, "blank": True
@@ -6,14 +10,12 @@ NULLABLE = {
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100,
-                            verbose_name="Наименование")
-    description = models.CharField(max_length=200,
-                                   **NULLABLE,
-                                   verbose_name="Описание")
+    name = models.CharField(max_length=100, verbose_name="Наименование")
+    description = models.CharField(max_length=200, **NULLABLE, verbose_name="Описание")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Версия продукта', null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     class Meta:
         verbose_name = "Категория"
@@ -37,13 +39,36 @@ class Product(models.Model):
                                 verbose_name="Цена")
     data_factory = models.DateField(**NULLABLE)
     data_update = models.DateField(**NULLABLE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Версия продукта', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создатель', null=True, blank=True)
+    is_publish = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+        permissions = [
+            (
+                'set_published',
+                'Can publish posts'
+            ),
+        ]
+
+
+class ProductVersion(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Версия продукта')
+    version = models.IntegerField(verbose_name='Номер версии')
+    version_name = models.CharField(max_length=150, verbose_name='Название версии')
+    is_сurrent_version = models.BooleanField(verbose_name='Текущая версия')
+
+    def __str__(self):
+        return f'{self.version_name}'
+
+    class Meta:
+        verbose_name = 'версия продукта'
+        verbose_name_plural = 'версии продукта'
 
 
 class Blog(models.Model):
@@ -55,8 +80,6 @@ class Blog(models.Model):
     preview = models.ImageField(upload_to='blog_previews/',
                                 verbose_name="Превью",
                                 **NULLABLE)
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      verbose_name="Дата создания")
     is_published = models.BooleanField(default=False,
                                        verbose_name="Признак публикации")
     view_count = models.PositiveIntegerField(default=0,
@@ -68,3 +91,17 @@ class Blog(models.Model):
     class Meta:
         verbose_name = "Запись блога"
         verbose_name_plural = "Записи блога"
+
+
+class Contacts(models.Model):
+    company_name = models.CharField(max_length=100, verbose_name='Название компании')
+    number = PhoneNumberField(verbose_name='Номер телефона')
+    email = models.EmailField(verbose_name='Email')
+    office = models.CharField(max_length=150, verbose_name='Адрес офиса')
+
+    def __str__(self):
+        return f'{self.company_name}'
+
+    class Meta:
+        verbose_name = 'контакт'
+        verbose_name_plural = 'контакты'

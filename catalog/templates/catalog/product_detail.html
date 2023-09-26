@@ -1,0 +1,55 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+    {#{% if user.is_authenticated %}#}
+    {#        {% else %}#}
+    {#            Войдите, чтобы видеть и создавать продукты#}
+    {#        {% endif %}#}
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+
+        {% if user.is_authenticated %}
+            <h1 class="display-4 fw-normal text-body-emphasis">
+                {{ object.name }}
+            </h1>
+            <p></p>
+            <div class="col">
+                <div>
+                    <p>
+                        <img src="{% mediapath object.photo %}" alt=""/>
+                    </p>
+                    {{ object.description }}
+                    <p>
+                        Цена: {{ object.price }} руб.
+                        {{ product.active_version.version_name }}
+                    </p>
+                    {% if object.is_current_version %}
+                        - Активная версия: {{ object.active_version.version_number }} (
+                        {{ object.active_version.version_name }})
+                    {% endif %}
+                    <a href="/product/{{ object.pk }}/update"
+                       class="btn btn-lg btn-primary"
+                       type="button">
+                        Редактировать
+                    </a>
+                    {% if user|is_moderator or user == product.user %}
+                        <a href="{% url 'catalog:update_product' pk=product.pk %}"
+                           class="btn btn-sm btn-outline-secondary">
+                            Изменить
+                        </a>
+                    {% endif %}
+                    {% if user.is_superuser %}
+                        <a href="{% url 'catalog:delete_product' pk=product.pk %}"
+                           class="btn btn-sm btn-outline-secondary text-danger">
+                            Удалить
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            Войдите, чтобы видеть и создавать продукты
+        {% endif %}
+
+    </div>
+{% endblock %}
